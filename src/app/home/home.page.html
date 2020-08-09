@@ -1,20 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header  *ngIf=" !selectedUser">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title> Users List</ion-title>
+        <ion-label slot="end" style="margin-right: 10px;" routerLink="users">
+          <ion-icon  name="add"></ion-icon>
+          </ion-label> 
     </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  </ion-header>
+  
+  <ion-content *ngIf="userData.length>0 && !selectedUser">
+    <ion-list>
+      <ion-label color="secondary" ><p style="text-align: end; margin-right: 10px;"> *swipe left to take an action</p></ion-label>
+      <!-- Multi-line sliding item with icon options on both sides -->
+      <ion-item-sliding  *ngFor="let user of userData" >
+        <ion-item   (click)="user.toggle=!user.toggle" button>
+          <ion-label>
+            <h2><b>{{user.name|uppercase}}</b></h2>
+            
+           
+            
+            <div *ngIf="user.toggle">
+              <p> <b>Address: </b>{{user.address}}</p>
+              <p><b>DOB: </b>{{user.DOB|date:'shortDate'}}</p>
+              <p><b>Email: </b>{{user.email}}</p>
+              <p><b>Phone No: </b>{{user.phoneNo}}</p>
+              <p><b>Profession: </b>{{user.profession}}</p>
+            
+            </div>
+          
+           
+          </ion-label>
+          <ion-icon *ngIf="!user.toggle" name="chevron-down-outline" slot="end"   ></ion-icon>
+          <ion-icon *ngIf="user.toggle" name="chevron-up-outline" slot="end"   ></ion-icon>
+          <!-- <ion-note slot="end">
+            <ion-icon  name="arrow-down"  (click)="user.toggle=!user.toggle"></ion-icon>
+          </ion-note> -->
+          
+        </ion-item>
+    
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="delete(user.key)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="update(user)">
+            <ion-icon slot="icon-only" name="create"  ></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    
+      
+    </ion-list>
+  </ion-content>
+<ion-content *ngIf="selectedUser" style="height: 100%;">
+  <app-edit  [user]="selectedUser" (clear)="clear()"></app-edit>
 </ion-content>
+
